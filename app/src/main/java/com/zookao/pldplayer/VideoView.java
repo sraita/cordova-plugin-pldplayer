@@ -1,10 +1,10 @@
 package com.zookao.pldplayer;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,11 +24,14 @@ public class VideoView extends FrameLayout implements View.OnClickListener{
 
 
     private static final String TAG = "VideoView";
+    private static final String VIDEO_PATH_480 = "http://hc.yinyuetai.com/uploads/videos/common/2B40015FD4683805AAD2D7D35A80F606.mp4?sc=364e86c8a7f42de3&br=783&rd=Android";
+    private static final String VIDEO_PATH_1080 = "http://appcdn.quxueedu.com/video/H_n8X8nPFqX3L3Jotrg_1517370260018.mp4";
 
     private static final int DELAY = 500;
     private static final int HIDE_DELAY = 5000;
 
-    private int PLAY_SPEED = 1;
+    private double PLAY_SPEED = 1.0;
+    private int currentTime = 0;
 
     private PLVideoTextureView mTextureView;
     private ImageView mPlay;
@@ -42,6 +45,8 @@ public class VideoView extends FrameLayout implements View.OnClickListener{
     private LinearLayout mQualityLayout;
     private Button mChangeQuality;
     private Button mChangeSpeed;
+
+
 
 
 
@@ -72,11 +77,13 @@ public class VideoView extends FrameLayout implements View.OnClickListener{
         mToolPlay.setOnClickListener(this);
         mChangeQuality.setOnClickListener(this);
 
+
         RadioGroup mQualityGroup = findViewById(R.id.quality_group);
 
         mQualityGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                currentTime = (int) mTextureView.getCurrentPosition();
                 changeVideoQuality(checkedId);
             }
         });
@@ -84,6 +91,7 @@ public class VideoView extends FrameLayout implements View.OnClickListener{
         // 更新播放速度
         mChangeSpeed = findViewById(R.id.speed);
         mChangeSpeed.setOnClickListener(this);
+
 
 
 
@@ -165,12 +173,9 @@ public class VideoView extends FrameLayout implements View.OnClickListener{
      * 显示视频质量切换框
      */
     private void toggleQualityChange() {
-
         if (mQualityLayout.getVisibility() == View.VISIBLE) {
             mQualityLayout.setVisibility(View.GONE);
         } else {
-            mTopLayout.setVisibility(View.GONE);
-            mBottomLayout.setVisibility(View.GONE);
             mQualityLayout.setVisibility(View.VISIBLE);
         }
     }
@@ -179,6 +184,23 @@ public class VideoView extends FrameLayout implements View.OnClickListener{
      * 更新视频质量
      */
     private void changeVideoQuality(int id) {
+        switch (id) {
+            case R.id.quality_1080p:
+                mTextureView.setVideoPath(VIDEO_PATH_1080);
+                mChangeQuality.setText("1080p");
+                break;
+            case R.id.quality_720p:
+                mChangeQuality.setText("720p");
+                break;
+            case R.id.quality_480p:
+                mTextureView.setVideoPath(VIDEO_PATH_480);
+                mChangeQuality.setText("清晰");
+                break;
+            case R.id.quality_360p:
+                mChangeQuality.setText("流畅");
+                break;
+        }
+
         mQualityLayout.setVisibility(View.GONE);
     }
 
@@ -186,13 +208,29 @@ public class VideoView extends FrameLayout implements View.OnClickListener{
      * 切换视频播放速率
      */
     private void changeVideoSpeed() {
-        if (PLAY_SPEED < 3 && PLAY_SPEED > 0) {
-            PLAY_SPEED += 1;
+        if (PLAY_SPEED < 1.5) {
+            PLAY_SPEED += 0.25;
         } else {
-            PLAY_SPEED = 1;
+            PLAY_SPEED = 0.75;
         }
 
-        mTextureView.setPlaySpeed(PLAY_SPEED);
+        switch (String.valueOf(PLAY_SPEED)) {
+            case "0.75":
+                mTextureView.setPlaySpeed(0x00030004);
+                break;
+            case "1.0":
+                mTextureView.setPlaySpeed(0x00010001);
+                break;
+            case "1.25":
+                mTextureView.setPlaySpeed(0x00050004);
+                break;
+            case "1.5":
+                mTextureView.setPlaySpeed(0x00030002);
+                break;
+        }
+
+        Log.i("playSpeed", "playSpeed is : "+PLAY_SPEED);
+
         mChangeSpeed.setText(PLAY_SPEED+"x");
     }
 
@@ -235,6 +273,9 @@ public class VideoView extends FrameLayout implements View.OnClickListener{
         return super.onTouchEvent(event);
     }
 
+
+
+
     private Runnable mTicker = new Runnable() {
 
         @Override
@@ -262,4 +303,6 @@ public class VideoView extends FrameLayout implements View.OnClickListener{
         removeCallbacks(mTicker);
         removeCallbacks(mHider);
     }
+
+
 }

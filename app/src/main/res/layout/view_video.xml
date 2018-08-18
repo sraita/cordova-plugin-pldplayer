@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -44,8 +45,9 @@
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminateDrawable="@drawable/loading"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:background="#8d000000"
+        android:indeterminateDrawable="@drawable/loading" />
 
     <LinearLayout
         android:id="@+id/top_layout"
@@ -76,15 +78,6 @@
             android:text="Title"
             android:textColor="@android:color/white" />
 
-
-        <Button
-            android:id="@+id/setting"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_margin="8dp"
-            android:background="@drawable/more"
-            android:padding="8dp"
-            android:textColor="@android:color/white" />
 
     </LinearLayout>
 
@@ -213,9 +206,9 @@
                 android:layout_weight="1"
                 android:button="@null"
                 android:checked="true"
+                android:textColor="@color/radiobutton_textcolor"
                 android:padding="8dp"
-                android:text="高清 1080P"
-                android:textColor="@android:color/holo_red_light" />
+                android:text="高清 1080P" />
 
             <RadioButton
                 android:id="@+id/quality_720p"
@@ -225,7 +218,8 @@
                 android:button="@null"
                 android:padding="8dp"
                 android:text="高清 720P"
-                android:textColor="@android:color/white" />
+                android:textColor="@color/radiobutton_textcolor"
+                />
 
             <RadioButton
                 android:id="@+id/quality_480p"
@@ -235,7 +229,8 @@
                 android:button="@null"
                 android:padding="8dp"
                 android:text="清晰 480P"
-                android:textColor="@android:color/white" />
+                android:textColor="@color/radiobutton_textcolor"
+                />
 
             <RadioButton
                 android:id="@+id/quality_360p"
@@ -245,8 +240,9 @@
                 android:button="@null"
                 android:padding="8dp"
                 android:text="流畅 360P"
-                android:textColor="@android:color/white" />
+                android:textColor="@color/radiobutton_textcolor" />
         </RadioGroup>
+
     </LinearLayout>
 
 
